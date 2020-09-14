@@ -1,38 +1,46 @@
 #define PIN_LED 7
-
+unsigned int count, toggle;
+boolean ledOn=false; 
 
 void setup() {
   pinMode(PIN_LED, OUTPUT);
-  int count = 0;
-     
-//  처음 1초동안 LED를 켜고 다음 1초동안 LED가 5회 깜빡이도록 할 것
-//  LED를 끄고 무한루프 상태에서 종료
-    while(1){
-      if(count == 0){
-        digitalWrite(PIN_LED, HIGH); 
-        delay(1000); 
-        digitalWrite(PIN_LED, LOW); 
-        delay(1000); 
-      }
-      else if(count > 0 && count < 6){
-        digitalWrite(PIN_LED, HIGH); 
-        delay(200); 
-        digitalWrite(PIN_LED, LOW); 
-        delay(200); 
-      }
-      else{
-        digitalWrite(PIN_LED, 1);
-        break;
-      }
-      count++; 
-    }
-    
+  Serial.begin(115200); // Initialize serial port
+  while (!Serial) {
+    ; // wait for serial port to connect.
+  }
+  Serial.println("Hello World!");
+  count = toggle = 0;
+  digitalWrite(PIN_LED, toggle); // turn off LED.
 }
 
 void loop() {
-     
+//  Serial.println(++count);
+  
+  // toggle = toggle_state(toggle); // toggle LED value.
+  while(count < 12){
+    if(count == 0){
+      toggle = toggle_state(toggle); // toggle LED value.
+      digitalWrite(PIN_LED, toggle); // update LED status.
+      delay(1000); // wait for 1,000 milliseconds
+      }
+    else{
+      toggle = toggle_state(toggle); // toggle LED value.
+      digitalWrite(PIN_LED, toggle); // update LED status.
+      delay(100); // wait for 200 milliseconds  
+    }
+    count++;
+  }
+  
+   while(1){}
 }
 
 int toggle_state(int toggle) {
-   
+    if(ledOn==true) {
+    toggle = 1;
+   } 
+   else { 
+    toggle = 0; 
+  } 
+    ledOn=!ledOn;
+  return toggle;
 }
